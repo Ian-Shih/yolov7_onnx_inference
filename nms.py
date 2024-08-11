@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import random
 def calculate_iou(boxes1, boxes2):
     x1_1, y1_1, x2_1, y2_1 = boxes1[0], boxes1[1], boxes1[2], boxes1[3]
     x1_2, y1_2, x2_2, y2_2 = boxes2[0], boxes2[1], boxes2[2], boxes2[3]
@@ -28,9 +29,15 @@ def draw_boxes(image, detections, class_names):
         class_id = int(cls)
 
         label = f'{class_names[class_id]}: {cls_conf:.2f}'
+        random_tuple = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        
+        #black border
+        border_color = (0, 0, 0)
+        cv2.rectangle(image, (x1, y1), (x2, y2), border_color, 3)
+        cv2.rectangle(image, (x1, y1), (x2, y2), random_tuple, 2)
 
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, border_color, 3)
+        cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, random_tuple, 2)
 
     return image
 
