@@ -1,28 +1,29 @@
 # yolov7_onnx_inference
 
-### cd to "yolov7/" and run these commands
+### Create a Docker Container
 
-<pre><code># install yolov7 requirements
-pip install -r requirements.txt
-
-# install requirements for torch gpu
-pip install torch==1.12.0+cu113 torchvision==0.13.0+cu113 torchaudio==0.12.0+cu113 --extra-index-url https://download.pytorch.org/whl/cu113
-
-# install requirements for export onnx
-pip install onnx==1.14.1 onnxruntime==1.14.1
+<pre><code># Go to Code Folder
+cd your_path/yolov7_onnx_inference
   
-# export onnx
+# Build an Image by Using Dockerfile
+docker build -t yolov7_image .
+
+# Create and Run a Container by Using Image
+docker run --gpus all --name yolov7 -it -v /your_path/:/app --shm-size=64g yolov7_image</code></pre>
+
+### Export Onnx
+<pre><code>cd yolov7
 python export.py --weights yolov7.pt --grid --simplify --topk-all 100 --iou-thres 0.65 --conf-thres 0.35 --img-size 640 640 --max-wh 640 </code></pre>
 
-### run onnx_inference.py
+### Run onnx_inference.py
 <pre><code>cd ..
-python onnx_inference.py --input-image input\walk.jpg --model-path yolov7\yolov7.onnx --output-folder output --conf-thres 0.6 --iou-thres 0.4  
+python onnx_inference.py --input-image input/walk.jpg --model-path yolov7/yolov7.onnx --output-folder output --conf-thres 0.6 --iou-thres 0.4  
 </code></pre>
 
-### output image
+### Output Image
 ![Alt text](/output/walk.jpg)
 
-### output txt
+### Output Txt
 <pre><code>x1	y1	x2	y2	bbox_conf	class_conf	class
 417.089111328125	82.91847229003906	468.669921875	343.479248046875	0.8768256902694702	0.8767907023429871	0.0
 318.99261474609375	17.335662841796875	404.59698486328125	391.7721862792969	0.8746476769447327	0.8746188282966614	0.0
@@ -34,6 +35,9 @@ python onnx_inference.py --input-image input\walk.jpg --model-path yolov7\yolov7
 111.32697296142578	126.38291931152344	154.28138732910156	241.2587127685547	0.7211576700210571	0.7186387777328491	26.0
 </code></pre>
 
-### cpu inference time
-<pre><code>Process Time: 0.561929 秒
-</code></pre>
+### Inference Time
+<pre><code>#CPU
+Process Time: 0.561929 秒
+
+#GPU
+Process Time: 12.601436 秒</code></pre>
