@@ -41,3 +41,7 @@ Process Time: 0.561929 秒
 
 #GPU
 Process Time: 12.601436 秒</code></pre>
+
+### Acknowledgements
+https://github.com/WongKinYiu/yolov7
+
